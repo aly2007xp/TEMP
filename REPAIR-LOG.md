@@ -25,7 +25,7 @@ Status: **powers up but accepts no cards — triage in progress (section 0).**
 ### LED pattern identified
 Every card gives: **green → yellow → red, then all three together**. The relay never clicks.
 
-dormakaba's KB lists "one green, one yellow, one red, then all three flash 4×" as **fatal test mode: lock E2 failed**. "E2" is the E²PROM, the memory chip holding the unit's settings. If all three flash exactly 4 times, this is the code.
+dormakaba's KB lists "one green, one yellow, one red, then all three flash 4×" as **fatal test mode: lock E2 failed**. "E2" is the E²PROM, the memory chip holding the unit's settings. **Update: all three flash only once, not 4×, so this does not exactly match the E2-failed code.** The KB lists several "sequence, then all three flash" mode codes (e.g. Mode 1 = not programmed), and the exact table hasn't been confirmed yet. Lost programming fits the history best; `U1` remains a secondary suspect.
 
 Prime suspect: **`U1`, the SOIC-8 at the top right of the main board** (to be confirmed by reading its marking; a 24Cxx/25xx part = EEPROM).
 
