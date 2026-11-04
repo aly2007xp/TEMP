@@ -1,6 +1,6 @@
 # dormakaba / Saflok card reader — repair log
 
-Status: **fault located, not yet repaired.**
+Status: **no fault confirmed yet — waiting on symptoms and wax removal.**
 Started 2026-11-04.
 
 ---
@@ -39,13 +39,16 @@ The main board is **not** a low-voltage board. It has a line fuse, a MOV and a 2
 
 ## 3. Confirmed fault
 
-### 🔴 `U3` on the reader board (JVE-M2) has ruptured
+### ⚪ `U3` area on the reader board — wax residue, not a confirmed fault
 
-See `photos/05-ZOOM-blown-U3.jpg`. The package has physically burst — there is a crater with radial splatter where the body used to be, immediately to the right of `D5` and above `TP52`. This is not solder flux or conformal coating; the part has let go.
+`photos/05-ZOOM-U3-wax-residue.jpg` shows a black glossy blob over `U3`, right of `D5`. It first looked like a ruptured package, but **the unit was originally covered in black wax**, so this is most likely leftover wax and `U3` may be fine underneath.
 
-`U3` sits in the board's **power-entry cluster** alongside `D5`, `D13`, `U4` and the unpopulated `U5` / `R43` footprints. That position plus a `U` designator makes it almost certainly a small regulator, load switch or reverse-polarity FET in a SOT-23-5/6 package.
+To confirm:
+1. Soften the wax with gentle hot air (~80–100 °C, low flow) and wipe it off with a cotton swab. Finish with IPA or naphtha. Don't scrape — the pads lift easily.
+2. Inspect `U3` at 10×: cracked body, bulging, burn marks or discoloured board underneath = failed. Clean, flat, intact = probably OK.
+3. Clean the wax off the whole board the same way. Wax hides cracked joints, corrosion and burnt parts, and can trap moisture.
 
-**A part fails that way from overvoltage or reverse polarity on its input — not from age.** Something upstream did this, and finding that cause matters as much as replacing the part. Replacing `U3` into a fault that is still present just destroys the new one.
+**No fault is confirmed yet.** Diagnosis now depends on the symptoms (section 9) and the measurements in section 5.
 
 ### 🟠 Prior repair attempts — treat as suspect
 
@@ -111,7 +114,7 @@ Inject **1–2 V at ~1 A** into the shorted rail from the bench supply. The shor
 
 ---
 
-## 6. Repairing `U3`
+## 6. If a regulator such as `U3` does turn out to be dead
 
 1. **Remove the remains.** Hot air at ~300 °C, low flow, shield the nearby QFN and the crystal with kapton. Lift the carcass with tweezers. Do not pry — the pads will come with it.
 2. **Clean the footprint.** Solder braid plus flux, then IPA. Get it back to bare, bright pads.
@@ -153,7 +156,7 @@ Very helpful:
 | 7 | Flex continuity, all 16 conductors end to end | < 1 Ω each | | |
 | 8 | Main board DC rail, flex unplugged, bench supply | stable, in spec | | |
 | 9 | Main board current draw, flex unplugged | not in current limit | | |
-| 10 | `U3` footprint: pad count + package | — | | |
+| 10 | `U3` condition after wax removal | intact | | |
 | 11 | RFID transceiver QFN part number | — | | |
 | 12 | Downstream rail voltage after `U3` repair | likely 3.3 V | | |
 
@@ -174,10 +177,9 @@ These change the plan and aren't answerable from the photos:
 ## 10. Next actions
 
 - [ ] Answer the questions in section 9
-- [ ] Clean all flux residue, re-inspect at 10×
+- [ ] Remove the black wax (gentle heat + IPA/naphtha), re-inspect all boards at 10×
+- [ ] Check `U3` specifically once uncovered
 - [ ] Map the bodge wires (5.2) — **do this before applying any power**
 - [ ] Short hunt on the isolated reader board (5.3)
 - [ ] Bench-supply bring-up of the main board with flex unplugged (5.4)
-- [ ] Remove `U3`, photograph and net-map the bare footprint (6.1–6.4)
-- [ ] Identify and source the replacement part
-- [ ] Fit, bring up current-limited, retest
+- [ ] Only if a dead part is found: replace it per section 6
