@@ -22,6 +22,20 @@ Status: **powers up but accepts no cards — triage in progress (section 0).**
 - Not yet known: is that one pattern per card, or each LED for a different card? Does the relay click?
 - If every card gets the same mixed pattern and no relay click, the likely cause is lost programming or a wrong clock. Fix: re-initialise it from the property's Saflok system, or contact dormakaba support with the model number.
 
+### LED pattern identified
+Every card gives: **green → yellow → red, then all three together**. The relay never clicks.
+
+dormakaba's KB lists "one green, one yellow, one red, then all three flash 4×" as **fatal test mode: lock E2 failed**. "E2" is the E²PROM, the memory chip holding the unit's settings. If all three flash exactly 4 times, this is the code.
+
+Prime suspect: **`U1`, the SOIC-8 at the top right of the main board** (to be confirmed by reading its marking; a 24Cxx/25xx part = EEPROM).
+
+Plan:
+1. Count the all-three flashes (expect 4).
+2. Read `U1`'s marking.
+3. Clean wax/flux around `U1`, inspect its 8 joints at 10×, reflow them.
+4. Powered at 12 V, check `U1`'s supply (typically pin 8 to pin 4 ≈ 3.3 V).
+5. If the code remains, replace `U1` with the identical part. A new blank chip means the unit must be **re-programmed from the property's Saflok system** (or by dormakaba).
+
 ### Questions for the repair technician
 - What exactly did he replace or rewire, and why?
 - Did he replace, reflash or touch the MCU, or the SOIC-8 `U1` (likely the EEPROM)?
