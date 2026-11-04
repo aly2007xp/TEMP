@@ -39,6 +39,15 @@ Plan:
 ### USB test
 Plugged the LED board's mini-USB `J1` into a Windows PC with the unit at 12 V: **nothing appears in Device Manager**, while the unit's **yellow LED blinks**. Most likely `J1` is dormakaba's **programming port** (for their handheld programmer / service device), not a USB device the PC can see. The yellow blink = it sensed something plugged in and is waiting for a programmer. Rule out a charge-only cable with a known data cable.
 
+### HH6 User Reference Guide (rev 7_13) — what applies
+The guide has no LED code table. It describes how to program and diagnose with the HH6:
+- **Setup:** HH6 connects to the PC running **Saflok System 6000 Client** by USB. In the client: Locks tab → *HH6 Program and Interrogate Locks* → pick the door → **Synchronize**. Log in on the HH6 with the user set up in System 6000.
+- **Diagnose first:** HH6 → Locks → Diagnostic (4) → **Ver/LED Diag (1)** → OK → insert probe. It shows lock number, firmware, clock, **mode** (e.g. "MODE:2 PROPERTY PROG'D"), **E2 status** and the **last lock error in plain text** (e.g. "123: KEY ISN'T PROG'D INTO / DOES NOT BELONG TO THIS LOCK").
+- **Advanced Diag (2):** insert the probe *before* pressing OK.
+- **Program:** HH6 → Locks → **Program Locks (1)** → pick the lock → OK → insert probe → "programmed successfully".
+- **Clock:** HH6 → Locks → **Clock Update** → OK → insert probe.
+- Don't connect the ELPS (emergency power box) to the HH6 while programming.
+
 ### Questions for the repair technician
 - What exactly did he replace or rewire, and why?
 - Did he replace, reflash or touch the MCU, or the SOIC-8 `U1` (likely the EEPROM)?
