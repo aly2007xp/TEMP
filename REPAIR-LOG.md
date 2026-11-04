@@ -1,6 +1,26 @@
 # dormakaba / Saflok card reader — repair log
 
-Status: **no fault confirmed yet — waiting on symptoms and wax removal.**
+Status: **powers up but accepts no cards — triage in progress (section 0).**
+
+## 0. History and current symptom
+
+- **Originally:** completely dead.
+- **Then:** sent to an outside repair technician, who got it powering up. The hand-soldered wires (section 3) are probably his work.
+- **Now:** powers up but **accepts no card**.
+
+### Triage: what does it do when a card is presented?
+
+| Reaction to a card | Meaning | Where to look |
+|---|---|---|
+| **No reaction at all** (no LED, no beep) | Card is not being detected | RF side: reader board, antenna, matching network (L1–L6, C1/C2...), transceiver QFN, the flex cable, wax-covered joints on the reader board |
+| **Red LED / reject beep** | Card is read, then refused | Programming, not hardware: lost site data or wrong clock. Re-initialise from the property's own Saflok system |
+| **Green LED but no click / door doesn't release** | Card is accepted, output fails | Relay (DSP1a-L2), its driver transistor, relay coil supply, J5 wiring |
+
+### Questions for the repair technician
+- What exactly did he replace or rewire, and why?
+- Did he replace, reflash or touch the MCU, or the SOIC-8 `U1` (likely the EEPROM)?
+- What are the two brown wires on the main board for?
+
 Started 2026-11-04.
 
 ---
