@@ -16,6 +16,12 @@ Status: **powers up but accepts no cards — triage in progress (section 0).**
 | **Red LED / reject beep** | Card is read, then refused | Programming, not hardware: lost site data or wrong clock. Re-initialise from the property's own Saflok system |
 | **Green LED but no click / door doesn't release** | Card is accepted, output fails | Relay (DSP1a-L2), its driver transistor, relay coil supply, J5 wiring |
 
+### Result of first bench test (12 V)
+- Powers up normally.
+- **Reacts to cards**: green, red and yellow LEDs flash. So the RF reader hardware is working.
+- Not yet known: is that one pattern per card, or each LED for a different card? Does the relay click?
+- If every card gets the same mixed pattern and no relay click, the likely cause is lost programming or a wrong clock. Fix: re-initialise it from the property's Saflok system, or contact dormakaba support with the model number.
+
 ### Questions for the repair technician
 - What exactly did he replace or rewire, and why?
 - Did he replace, reflash or touch the MCU, or the SOIC-8 `U1` (likely the EEPROM)?
