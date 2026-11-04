@@ -38,7 +38,7 @@ Three boards, identified from the silkscreen and labels in `photos/`:
 The three are linked by the **16-pin flat-flex (FFC)** that lands in the ZIF connector at the top of the main board (silicone-staked at both ends from the factory).
 
 ### Main board, notable parts
-- `FH1` fuse + red MOV + bridge — **this board runs directly off AC mains**
+- `FH1` fuse + red MOV/PTC + probable bridge `D8` on the low-voltage input (see section 2)
 - Relay: Panasonic **DSP1a-L2** 2-coil latching, contacts rated **250 V AC**
 - `J5` yellow terminal block, `J4` / `J8` white JST headers, `J?` 16-pin FFC
 - `C8` 100 µF 25 V electrolytic (bulk rail), SOT-23 regulators `U5` etc.
@@ -46,16 +46,25 @@ The three are linked by the **16-pin flat-flex (FFC)** that lands in the ZIF con
 
 ---
 
-## 2. ⚠️ Safety — read before touching it
+## 2. Power rating and how to power it
 
-The main board is **not** a low-voltage board. It has a line fuse, a MOV and a 250 V relay, with mains landing on the white/black wires at `H1`/`H2`.
+**No rating label is visible on the boards.** This is an estimate from the parts. Confirm it from the enclosure label, the original power supply or the wiring at the install site.
 
-- Unplug it from mains before any probing. Full stop.
-- After unplugging, **discharge `C8` (100 µF 25 V)** and any bulk cap on the primary side before touching the board.
-- Do all diagnostic bring-up from a **bench supply on the DC rail**, never from mains. There is no reason to energise the mains side to test the reader.
-- If you ever must probe live, use an isolation transformer and a differential probe. Scope ground on a non-isolated mains board will make a very loud mistake.
+Evidence:
+- The bulk capacitor `C8` is **100 µF 25 V**. A mains-powered board would need a ~400 V capacitor, so **this is a low-voltage board, not mains**. The relay's 250 V AC marking is only its contact rating, for the load it switches.
+- An input fuse `FH1`, a red protection part (MOV or PTC) and what appears to be a bridge rectifier `D8` (to be confirmed). A bridge means it likely accepts **AC or DC, either polarity**.
+- The relay coil is **6 V**, and there are 22 µH inductors: the input is stepped down to ~5–6 V and then 3.3 V internally.
 
----
+**Best estimate: 12 V DC (or 12 V AC).** Do not go to 24 V until confirmed: 24 V AC rectified is ~34 V peak, above the 25 V capacitor's rating.
+
+The input is most likely the **white wire pair on `H1`/`H2`**, next to fuse `FH1`. Confirm by tracing.
+
+### First power-up procedure
+1. Use an adjustable bench supply. Set **12.0 V** and a **current limit of 300 mA**.
+2. Connect it to the input wires. (Polarity shouldn't matter if `D8` is a bridge. If unsure, + to one wire, then try the other.)
+3. Switch on and watch the current. Expect roughly tens of mA at idle, with short spikes when the relay pulses.
+4. If it goes straight into current limit, switch off and look for a short.
+5. With no bench supply: a 12 V DC adapter rated ≥ 500 mA.
 
 ## 3. Confirmed fault
 
@@ -120,7 +129,7 @@ Reader board **disconnected** from everything. Meter in resistance mode, black p
 
 ### 5.4 Is the main board alive? (the decisive test)
 - **Unplug the flex**, isolating the reader board completely.
-- Feed the main board's DC rail from a **bench supply with the current limit set low** (start ~100 mA). Do not use mains.
+- Feed the main board's DC rail from a **bench supply with the current limit set low** (12 V, start ~100–300 mA).
 - Does the rail come up and hold? Does the MCU's crystal `X1` oscillate (scope, or check for the expected rail on `VDD`)? Do the LEDs do anything?
 
 | Result | Meaning |
@@ -136,7 +145,7 @@ Inject **1–2 V at ~1 A** into the shorted rail from the bench supply. The shor
 
 ## 6. If a regulator such as `U3` does turn out to be dead
 
-1. **Remove the remains.** Hot air at ~300 °C, low flow, shield the nearby QFN and the crystal with kapton. Lift the carcass with tweezers. Do not pry — the pads will come with it.
+1. **Remove the remains.** Hot air at ~300 °C, low flow, shield the nearby QFN and the crystal with kapton. Lift the part with tweezers. Do not pry — the pads will come with it.
 2. **Clean the footprint.** Solder braid plus flux, then IPA. Get it back to bare, bright pads.
 3. **Photograph the bare footprint** and count the pads. Note the silkscreen pin-1 marker and the package outline. Add the photo to `photos/`. This identifies the package (SOT-23-3 / -5 / -6) and is the single most useful piece of evidence for picking a replacement.
 4. **Trace the net of every pad** with a meter: which goes to the flex connector's supply pin, which to GND, which to the downstream rail that feeds the QFN transceiver.
