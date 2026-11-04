@@ -36,6 +36,9 @@ Plan:
 4. Powered at 12 V, check `U1`'s supply (typically pin 8 to pin 4 ≈ 3.3 V).
 5. If the code remains, replace `U1` with the identical part. A new blank chip means the unit must be **re-programmed from the property's Saflok system** (or by dormakaba).
 
+### USB test
+Plugged the LED board's mini-USB `J1` into a Windows PC with the unit at 12 V: **nothing appears in Device Manager**, while the unit's **yellow LED blinks**. Most likely `J1` is dormakaba's **programming port** (for their handheld programmer / service device), not a USB device the PC can see. The yellow blink = it sensed something plugged in and is waiting for a programmer. Rule out a charge-only cable with a known data cable.
+
 ### Questions for the repair technician
 - What exactly did he replace or rewire, and why?
 - Did he replace, reflash or touch the MCU, or the SOIC-8 `U1` (likely the EEPROM)?
